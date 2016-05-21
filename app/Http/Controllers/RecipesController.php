@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ingredients;
 use App\Models\Recipe;
 use App\Models\User;
+use App\USDA\RecipeCalc;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ use \Validator;
 class RecipesController extends Controller {
 
     public function __construct() {
-        $this->middleware('token');
+       $this->middleware('token');
     }
 
     /**
@@ -93,7 +94,10 @@ class RecipesController extends Controller {
         /** Get all recipes with its ingredients*/
         $recipe = Recipe::with('ingredients')->find($id);
 
-        /** Loop all */
+        /** Loop all ingredients, getting data from the cache */
+        $nutrition_facts = new RecipeCalc($recipe->ingredients);
+
+        var_dump($nutrition_facts->ingredients_list);
 
         /** Return All user Recipes */
         return $recipe->toJson();
@@ -109,8 +113,8 @@ class RecipesController extends Controller {
      */
     public function updateRecipe(Request $request, $id) {
         /** validate the data */
-        var_dump($request->all()); die;
         $data = $request->json()->all();
+        var_dump($data); die;
         $validator = Validator::make($data, Recipe::rules());
 
         if ($validator->fails()) {
