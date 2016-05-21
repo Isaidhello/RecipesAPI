@@ -19,4 +19,16 @@ class SearchController extends Controller {
         return response()->json([$data]);
     }
 
+    public function getFoodDetail($food_id) {
+        /** Get URL */
+        $url = formatFoodReportURL($food_id);
+
+        /** Hit the USDA Service and get the search */
+        $usda = new USDAData();
+        $data = $usda->getFoodData($url, $food_id);
+
+        /** Return list items */
+        return response()->json([$data]);
+    }
+
 }

@@ -40,6 +40,27 @@ class USDAData {
         return $this->handleSearchData($data);
     }
 
+    public function getFoodData($url, $food_id) {
+
+        /** Check if cache exists */
+        if (Cache::has($food_id)) {
+            $data = Cache::get($food_id);
+            return $this->handleReportData($data);
+        }
+
+        /** Hit the Service to get the search data */
+        $data = $this->hitService($url);
+        if (($data['error'])) {
+            return $data;
+        }
+
+        /** Cache data */
+        $this->cacheData($data, $food_id);
+
+        /** Return formatted JSON */
+        return $this->handleReportData($data);
+    }
+
     private function handleSearchData($data) {
         /** Decode Data JSON */
         $json = json_decode($data['body']);
@@ -51,6 +72,10 @@ class USDAData {
             $formatted_list[$item->ndbno] = $item->name;
         }
         return $formatted_list;
+    }
+
+    private function handleReportData($data) {
+        return $data;
     }
 
     private function hitService($url) {
