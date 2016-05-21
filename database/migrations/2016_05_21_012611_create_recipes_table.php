@@ -13,11 +13,11 @@ class CreateRecipesTable extends Migration {
         Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->bigInteger('id_user')->unsigned();
+            $table->integer('id_user')->unsigned();
             $table->longText('description');
 
             /** Set the Foreign keys */
-            $table->foreign("id_user")->references("id")->on("users");
+            $table->foreign('id_user')->references("id")->on("users");
         });
     }
 
