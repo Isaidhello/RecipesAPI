@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
 use \Validator;
@@ -15,7 +16,7 @@ use \Validator;
 class RecipesController extends Controller {
 
     public function __construct() {
-//        $this->middleware('token');
+        $this->middleware('token');
     }
 
     /**
@@ -23,8 +24,15 @@ class RecipesController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        //
+    public function index(Request $request) {
+
+        $user = $this->getUserData($request);
+
+        /** Get all recipes with its ingredients*/
+        $recipes = Recipe::with('ingredients')->byUser($user->id);
+
+        /** Return All user Recipes */
+        return $recipes->toJson();
     }
 
     /**
@@ -56,7 +64,7 @@ class RecipesController extends Controller {
             $recipe->save();
 
             /** Loop each ingredient and save it to a recipe */
-            foreach($data['ingredients'] as $food_id => $qty) {
+            foreach ($data['ingredients'] as $food_id => $qty) {
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
                 $ingredient->food_id = $food_id;
@@ -73,8 +81,6 @@ class RecipesController extends Controller {
             DB::rollback();
             return serviceErrorMessage($e->getMessage(), 400);
         }
-
-
     }
 
     /**
@@ -83,8 +89,15 @@ class RecipesController extends Controller {
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
-        //
+    public function show(Request $request, $id) {
+        /** Get all recipes with its ingredients*/
+        $recipe = Recipe::with('ingredients')->find($id);
+
+        /** Loop all */
+
+        /** Return All user Recipes */
+        return $recipe->toJson();
+
     }
 
     /**
@@ -94,8 +107,49 @@ class RecipesController extends Controller {
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        //
+    public function updateRecipe(Request $request, $id) {
+        /** validate the data */
+        var_dump($request->all()); die;
+        $data = $request->json()->all();
+        $validator = Validator::make($data, Recipe::rules());
+
+        if ($validator->fails()) {
+            /** Back to user the error */
+            return serviceErrorMessage($validator->messages(), 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            /** Save the Recipe */
+            $recipe = Recipe::find($id);
+            $recipe->name = $data['name'];
+            $recipe->description = $data['description'];
+            $recipe->save();
+
+            foreach($recipe->ingredients as $ingredient) {
+                $ingredient->delete();
+            }
+
+            /** Loop each ingredient and save it to a recipe */
+            foreach ($data['ingredients'] as $food_id => $qty) {
+                $ingredient = new Ingredients();
+                $ingredient->id_recipe = $recipe->id;
+                $ingredient->food_id = $food_id;
+                $ingredient->quantity = $qty;
+                $ingredient->save();
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'ok']);
+
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollback();
+            return serviceErrorMessage($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -105,7 +159,10 @@ class RecipesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $recipe = Recipe::find($id);
+        $recipe->delete();
+
+        return response()->json(['deleted' => 'OK']);
     }
 
     private function getUserData($request) {

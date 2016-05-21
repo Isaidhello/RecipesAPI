@@ -11,4 +11,8 @@ class Ingredients extends Model {
     /** Disable timestamps */
     public $timestamps = false;
 
+    public function recipe() {
+        return $this->belongsTo('App\Models\Recipe', 'id_recipe');
+    }
+
 }
