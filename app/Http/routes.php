@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/** User Routes */
+Route::post('/user/register', ['uses' => 'UserController@registerUser']);
+Route::post('/user/login', ['uses' => 'UserController@loginUser']);
