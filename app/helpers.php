@@ -36,6 +36,6 @@ function formatFoodReportURL($food_id) {
     return $base_url . $search_uri;
 }
 
-function returnAuthError($message, $code) {
+function serviceErrorMessage($message, $code) {
     return response()->json(['error' => $message], $code);
 }

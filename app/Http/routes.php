@@ -22,3 +22,6 @@ Route::post('/user/login', ['uses' => 'UserController@loginUser']);
 /** Search Routes */
 Route::get('/search/{term}', ['uses' => 'SearchController@searchByTerm']);
 Route::get('/report/{food_id}', ['uses' => 'SearchController@getFoodDetail']);
+
+/** Recipes routes */
+Route::resource('/recipes', 'RecipesController');

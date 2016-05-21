@@ -16,25 +16,25 @@ class TokenMiddleware {
     public function handle($request, Closure $next) {
         if ($request->hasHeader('APIAuth')) {
             if (empty($request->header('APIAuth'))) {
-                return returnAuthError('You must pass the Token to use the API', 401);
+                return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
                 $token = $request->header('APIAuth');
                 if (!$this->checkUser($token)) {
-                    return returnAuthError('Invalid API Token', 403);
+                    return serviceErrorMessage('Invalid API Token', 403);
                 }
 
             }
         } else if ($request->has('key')) {
             if (empty($request->get('key'))) {
-                return returnAuthError('You must pass the Token to use the API', 401);
+                return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
                 $token = $request->get('key');
                 if (!$this->checkUser($token)) {
-                    return returnAuthError('Invalid API Token', 403);
+                    return serviceErrorMessage('Invalid API Token', 403);
                 }
             }
         } else {
-            return returnAuthError('You must pass the Token to use the API', 401);
+            return serviceErrorMessage('You must pass the Token to use the API', 401);
         }
 
         return $next($request);
