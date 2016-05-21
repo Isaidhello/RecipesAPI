@@ -35,3 +35,7 @@ function formatFoodReportURL($food_id) {
     /** Return full URL */
     return $base_url . $search_uri;
 }
+
+function returnAuthError($message, $code) {
+    return response()->json(['error' => $message], $code);
+}

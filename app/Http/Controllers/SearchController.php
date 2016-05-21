@@ -6,6 +6,10 @@ use App\USDA\USDAData;
 
 class SearchController extends Controller {
 
+    public function __construct() {
+//        $this
+    }
+
     public function searchByTerm($term) {
 
         /** Get URL */

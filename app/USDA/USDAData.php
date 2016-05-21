@@ -75,7 +75,19 @@ class USDAData {
     }
 
     private function handleReportData($data) {
-        return $data;
+        $json = json_decode($data['body']);
+        $nutrients = $json->report->food->nutrients;
+
+        /** Loop each element and format item */
+        $formatted_list = [];
+        foreach ($nutrients as $nutrient) {
+            $formatted_list[$nutrient->nutrient_id] = [
+                "name" => $nutrient->name,
+                "unit" => $nutrient->unit,
+                "value" => $nutrient->value,
+            ];
+        }
+        return $formatted_list;
     }
 
     private function hitService($url) {
@@ -116,7 +128,7 @@ class USDAData {
     }
 
     private function cacheData($data, $term) {
-        /** Add data in Cache */
+        /** Add data in Cache for a month */
         Cache::add($term, $data, 720 * 60);
     }
 }
