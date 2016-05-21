@@ -3,18 +3,21 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration {
+class CreateRecipesTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->bigInteger('id_user')->unsigned();
+            $table->longText('description');
+
+            /** Set the Foreign keys */
+            $table->foreign("id_user")->references("id_user")->on("users");
         });
     }
 
@@ -24,6 +27,6 @@ class CreateUsersTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::drop('users');
+        Schema::drop('recipes');
     }
 }
