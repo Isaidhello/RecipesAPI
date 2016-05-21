@@ -15,8 +15,8 @@ class SearchController extends Controller {
         $usda = new USDAData();
         $data = $usda->performSearch($url, $term);
 
-        return response()->json(['data' => $data]);
+        /** Return list items */
+        return response()->json([$data]);
     }
-
 
 }
