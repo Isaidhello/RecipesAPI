@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Ingredients;
 use App\Models\Recipe;
 use App\Models\User;
-use App\USDA\RecipeCalc;
+use App\USDA\NutritionCalculation;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
 use \Validator;
@@ -17,7 +16,7 @@ use \Validator;
 class RecipesController extends Controller {
 
     public function __construct() {
-       $this->middleware('token');
+        $this->middleware('token');
     }
 
     /**
@@ -95,9 +94,9 @@ class RecipesController extends Controller {
         $recipe = Recipe::with('ingredients')->find($id);
 
         /** Loop all ingredients, getting data from the cache */
-        $nutrition_facts = new RecipeCalc($recipe->ingredients);
-
-        var_dump($nutrition_facts->ingredients_list);
+        $nutrition_facts = new NutritionCalculation($recipe->ingredients);
+        $totalNutrients = $nutrition_facts->calculateNutrients();
+        $recipe->aggregates_nutrients = $totalNutrients;
 
         /** Return All user Recipes */
         return $recipe->toJson();
@@ -114,7 +113,8 @@ class RecipesController extends Controller {
     public function updateRecipe(Request $request, $id) {
         /** validate the data */
         $data = $request->json()->all();
-        var_dump($data); die;
+        var_dump($data);
+        die;
         $validator = Validator::make($data, Recipe::rules());
 
         if ($validator->fails()) {
@@ -132,7 +132,7 @@ class RecipesController extends Controller {
             $recipe->description = $data['description'];
             $recipe->save();
 
-            foreach($recipe->ingredients as $ingredient) {
+            foreach ($recipe->ingredients as $ingredient) {
                 $ingredient->delete();
             }
 
