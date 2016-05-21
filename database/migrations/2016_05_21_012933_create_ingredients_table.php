@@ -18,7 +18,7 @@ class CreateIngredientsTable extends Migration {
             $table->longText('description');
 
             /** Set the Foreign keys */
-            $table->foreign("id_recipe")->references("id_user")->on("users");
+            $table->foreign("id_recipe")->references("id")->on("recipes");
         });
     }
 
