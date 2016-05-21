@@ -27,4 +27,9 @@ class User extends Authenticatable {
             "password" => "required"
         ];
     }
+
+    /** Query scope get user by token */
+    public function scopeByToken($query, $token) {
+        return $query->where('api_token', $token)->get();
+    }
 }

@@ -7,7 +7,7 @@ use App\USDA\USDAData;
 class SearchController extends Controller {
 
     public function __construct() {
-//        $this
+        $this->middleware('token');
     }
 
     public function searchByTerm($term) {
