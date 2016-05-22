@@ -1,5 +1,5 @@
-Constributors: Tiago Siqueira - tiago@imorec.com
-Constributors: Vitor Luis - vitor.luis98@gmail.com
+- Contributors: Tiago Siqueira - tiago@imorec.com
+- Contributors: Vitor Luis - vitor.luis98@gmail.com
 
 # Installing Meal API
 
