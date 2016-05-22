@@ -27,7 +27,7 @@
  * }
  * @see store
  *
- * Verb POST, route /recipes/{recipe_id}
+ * Verb PUT, route /recipes/{recipe_id}
  * @example /recipes/{recipe_id}?key=USR_API_KEY Update given Recipe ID.
  * JSON Example:
  * {

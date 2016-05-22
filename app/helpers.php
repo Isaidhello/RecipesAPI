@@ -78,7 +78,7 @@ function serviceErrorMessage($message, $code) {
  *    HTTP Request.
  *
  * @return object $user
- *    A valid databse user object.
+ *    A valid database user object.
  */
 function getUserModel($request) {
     /** Check if the Token is on Header */
