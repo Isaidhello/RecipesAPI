@@ -1,5 +1,8 @@
 - Contributors: Tiago Siqueira - tiago@imorec.com
-- Contributors: Vitor Luis - vitor.luis98@gmail.com
+- Contributors: Vitor Villar - vitor.luis98@gmail.com
+
+- Youtube Video about Project: https://www.youtube.com/watch?v=1Hp43GSb0l4
+- Github Repository: https://github.com/CoolRecipes/RecipesAPI
 
 # Installing Meal API
 
