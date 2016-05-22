@@ -23,11 +23,5 @@ Route::post('/user/login', ['uses' => 'UserController@loginUser']);
 Route::get('/search/{term}', ['uses' => 'SearchController@searchByTerm']);
 Route::get('/report/{food_id}', ['uses' => 'SearchController@getFoodDetail']);
 
-/**
- * This route is necessary due a Laravel issue with Payload on PUT Method Verb
- * https://github.com/laravel/framework/issues/5503
- */
-//Route::post('/recipes/update/{id}', ['uses' => 'RecipesController@updateRecipe']);
-
 /** Recipes routes */
 Route::resource('/recipes', 'RecipesController');

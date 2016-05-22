@@ -110,11 +110,9 @@ class RecipesController extends Controller {
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function updateRecipe(Request $request, $id) {
+    public function update(Request $request, $id) {
         /** validate the data */
         $data = $request->json()->all();
-        var_dump($data);
-        die;
         $validator = Validator::make($data, Recipe::rules());
 
         if ($validator->fails()) {
@@ -147,7 +145,7 @@ class RecipesController extends Controller {
 
             DB::commit();
 
-            return response()->json(['message' => 'ok']);
+            return response()->json(['update' => 'ok']);
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
