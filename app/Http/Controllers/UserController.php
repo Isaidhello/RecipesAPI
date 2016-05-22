@@ -14,8 +14,11 @@ class UserController extends Controller {
 
     /** Method to create a new user */
     public function registerUser(Request $request) {
+        /** get data from JSON */
+        $data = $request->json()->all();
+
         /** Validate the data */
-        $validator = Validator::make($request->all(), User::rules());
+        $validator = Validator::make($data, User::rules());
 
         /** Check if passes */
         if ($validator->fails()) {
@@ -24,9 +27,9 @@ class UserController extends Controller {
         }
 
         /** Get input data */
-        $name = $request->input("name");
-        $email = $request->input("email");
-        $password = $request->input("password");
+        $name = $data["name"];
+        $email = $data["email"];
+        $password = $data["password"];
 
         /** Save the user */
         $user = new User();
@@ -42,14 +45,11 @@ class UserController extends Controller {
 
     /** Method to login a user */
     public function loginUser(Request $request) {
-        /** Get the user data */
-        $login_data = [
-            "email" => $request->input("email"),
-            "password" => $request->input("password")
-        ];
+        /** Get JSON from Payload */
+        $data = $request->json()->all();
 
         /** Login the user */
-        if (Auth::once($login_data)) {
+        if (Auth::once($data)) {
             /** If is authenticated, create the token */
             /** Get the data */
             $now = Carbon::now();
