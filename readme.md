@@ -56,19 +56,18 @@ php artisan migrate
 
 That's it! The tables now were migrated to database.
 
-### Conclusion ###
+### Install Screen ###
 
 Now if you access http://your-configured-nameserver/ you should see this page as example:
 
 ![API](http://s32.postimg.org/cmed03dpx/Laravel_Google_Chrome_004.png)
 
 
-*******************************************************************************
- - CoolRecipes API Usage.
+### CoolRecipes API Usage. ###
+ 
  - RESTfull Server Resources List and Usage example:
 
-*******************************************************************************
-Register New User:
+### Register New User. ###
 
 - Description: 
 	Register a new user on CoolRecipe database.
@@ -82,11 +81,13 @@ Register New User:
 	- Email: String, rerquired;
 	- Password: String, rerquired;
 - Payload Example:
+```
 	{
 		"name" : "Example User",
 		"email" : "example@user.com",
 		"password" : "mypassword"
 	}
+```
 
 	
 *******************************************************************************
