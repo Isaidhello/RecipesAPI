@@ -70,25 +70,24 @@ Now if you access http://your-configured-nameserver/ you should see this page as
 *******************************************************************************
 Register New User:
 
-```
-> Description: 
+- Description: 
 	Register a new user on CoolRecipe database.
 
-> Verb: POST
-> URI: user/register
-> URL Example: {website_url}/user/register
-> Body Payload expected format: JSON
-> Fields:
+- Verb: POST
+- URI: user/register
+- URL Example: {website_url}/user/register
+- Body Payload expected format: JSON
+- Fields:
 	- Name: String, rerquired;
 	- Email: String, rerquired;
 	- Password: String, rerquired;
-> Payload Example:
+- Payload Example:
 	{
 		"name" : "Example User",
 		"email" : "example@user.com",
 		"password" : "mypassword"
 	}
-```
+
 	
 *******************************************************************************
 User Login / API Generation:
