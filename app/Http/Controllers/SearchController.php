@@ -20,7 +20,10 @@ use App\USDA\USDAData;
 
 class SearchController extends Controller {
 
-    public function __construct() {
+    private $usdaData;
+
+    public function __construct(USDAData $usda_data) {
+        $this->usdaData = $usda_data;
         $this->middleware('token');
     }
 
@@ -38,8 +41,7 @@ class SearchController extends Controller {
         $url = formatSearchURL($term);
 
         /** Hit the USDA Service and get the search result */
-        $usda = new USDAData();
-        $data = $usda->performSearch($url, $term);
+        $data = $this->usdaData->performSearch($url, $term);
 
         /** Return list items */
         return response()->json([$data]);
@@ -58,8 +60,7 @@ class SearchController extends Controller {
         $url = formatFoodReportURL($food_id);
 
         /** Hit the USDA Service and get the report results */
-        $usda = new USDAData();
-        $data = $usda->getFoodData($url, $food_id);
+        $data = $this->usdaData->getFoodData($url, $food_id);
 
         /** Return list items */
         return response()->json([$data]);

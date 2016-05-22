@@ -62,10 +62,16 @@ use \Validator;
 
 class RecipesController extends Controller {
 
+    private $usdaData;
+
     /**
      * Class constructor.
+     * @param USDAData $usdaData
      */
-    public function __construct() {
+    public function __construct(USDAData $usdaData) {
+        /** Set the Class dependent (DI) */
+        $this->usdaData = $usdaData;
+
         /** Set the middleware for this controller */
         $this->middleware('token');
     }
@@ -128,23 +134,22 @@ class RecipesController extends Controller {
 
             /** Loop each ingredient and save it to a recipe */
             foreach ($data['ingredients'] as $food_id => $qty) {
-				$url = formatFoodReportURL($food_id);
+                $url = formatFoodReportURL($food_id);
 
-				/** Hit the USDA Service and get the search
-				 * If the same search was performed before, the data will be get from the cache
-				 * */
-				$usda = new USDAData();
-				$nutrients_food_data = $usda->getFoodData($url, $food_id);
+                /** Hit the USDA Service and get the search
+                 * If the same search was performed before, the data will be get from the cache
+                 * */
+                $nutrients_food_data = $this->usdaData->getFoodData($url, $food_id);
 
-				if (!isset($nutrients_food_data['name'])) {
-					throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
-				}
+                if (!isset($nutrients_food_data['name'])) {
+                    throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
+                }
 
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
                 $ingredient->food_id = $food_id;
                 $ingredient->quantity = $qty;
-				$ingredient->description = $nutrients_food_data['name'];
+                $ingredient->description = $nutrients_food_data['name'];
                 $ingredient->save();
             }
 
@@ -180,7 +185,7 @@ class RecipesController extends Controller {
         $recipe = Recipe::with('ingredients')->find($id);
         /** Loop all ingredients, getting data from the cache */
         if (!is_null($recipe)) {
-            $nutrition_facts = new NutritionCalculation($recipe->ingredients);
+            $nutrition_facts = new NutritionCalculation($recipe->ingredients, $this->usdaData);
 
             /** Calculate all nutrients */
             $recipe->aggregates_nutrients = $nutrition_facts->calculateNutrients();
@@ -211,6 +216,7 @@ class RecipesController extends Controller {
          * Get JSON from Payload
          * */
         $data = $request->json()->all();
+
         /** Validate data */
         $validator = Validator::make($data, Recipe::rules());
 
@@ -222,9 +228,18 @@ class RecipesController extends Controller {
         /** Begin a database transaction  */
         DB::beginTransaction();
 
+        /** get the user */
+        $user = getUserModel($request);
+
         try {
             /** Save Recipe flow */
             $recipe = Recipe::find($id);
+
+            /** Verify if the current user is the owner */
+            if ($recipe->id_user != $user->id) {
+                throw new Exception('Invalid Recipe ID for this API Key');
+            }
+
             $recipe->name = $data['name'];
             $recipe->description = $data['description'];
             $recipe->save();
@@ -238,23 +253,22 @@ class RecipesController extends Controller {
 
             /** Loop each ingredient and saves it to a recipe */
             foreach ($data['ingredients'] as $food_id => $qty) {
-				$url = formatFoodReportURL($food_id);
+                $url = formatFoodReportURL($food_id);
 
-				/** Hit the USDA Service and get the search
-				 * If the same search was performed before, the data will be get from the cache
-				 * */
-				$usda = new USDAData();
-				$nutrients_food_data = $usda->getFoodData($url, $food_id);
+                /** Hit the USDA Service and get the search
+                 * If the same search was performed before, the data will be get from the cache
+                 * */
+                $nutrients_food_data = $this->usdaData->getFoodData($url, $food_id);
 
-				if (!isset($nutrients_food_data['name'])) {
-					throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
-				}
-				
+                if (!isset($nutrients_food_data['name'])) {
+                    throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
+                }
+
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
                 $ingredient->food_id = $food_id;
                 $ingredient->quantity = $qty;
-				$ingredient->description = $nutrients_food_data['name'];
+                $ingredient->description = $nutrients_food_data['name'];
                 $ingredient->save();
             }
 
@@ -279,19 +293,28 @@ class RecipesController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param  int $id
      *    Recipe ID.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy(Request $request, $id) {
         /** @var object $recipe
          * Find the Model
          * */
         $recipe = Recipe::find($id);
 
-		if (is_null($recipe)) {
-			return serviceErrorMessage('Recipe not found', 400);
-		}
+        if (is_null($recipe)) {
+            return serviceErrorMessage('Recipe not found', 400);
+        }
+
+        /** get the current user */
+        $user = getUserModel($request);
+
+        /** Verify if the current user is the owner */
+        if ($recipe->id_user != $user->id) {
+            throw new Exception('Invalid Recipe ID for this API Key');
+        }
 
         /** And remove */
         $recipe->delete();
@@ -300,3 +323,4 @@ class RecipesController extends Controller {
         return response()->json(['deleted' => 'OK']);
     }
 }
+

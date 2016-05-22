@@ -8,13 +8,16 @@ class NutritionCalculation {
     private $ingredients;
     private $sumNutrients;
     private $ingredientsList = [];
+    private $usdaData;
 
     /**
      * @param $ingredients
+     * @param USDAData $usdaData
      */
-    public function __construct($ingredients) {
+    public function __construct($ingredients, USDAData $usdaData) {
         /** Set the properties */
         $this->ingredients = $ingredients;
+        $this->usdaData = $usdaData;
     }
 
     /**
@@ -29,9 +32,8 @@ class NutritionCalculation {
             /** Hit the USDA Service and get the search
              * If the same search was performed before, the data will be get from the cache
              * */
-            $usda = new USDAData();
-            $nutrients_food_data = $usda->getFoodData($url, $ingredient->food_id);
-			$nutrients_food_data = $nutrients_food_data['nutrients'];
+            $nutrients_food_data = $this->usdaData->getFoodData($url, $ingredient->food_id);
+            $nutrients_food_data = $nutrients_food_data['nutrients'];
 
             /**
              * Calculate the nutrients of an ingredient, given the quantity in 'g'
@@ -51,7 +53,7 @@ class NutritionCalculation {
 
     /**
      * Calc individual nutrients based on its quantity in "g".
-     * 
+     *
      * @param array $data
      *    Nutrient data.
      * @param int $qty
