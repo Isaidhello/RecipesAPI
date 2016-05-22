@@ -1,3 +1,6 @@
+Constributors: Tiago Siqueira - tiago@imorec.com
+Constributors: Vitor Luis - vitor.luis98@gmail.com
+
 # Installing Meal API
 
 To install the Meal Nutrition API, follow these steps:
