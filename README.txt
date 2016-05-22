@@ -510,7 +510,7 @@ RESTfull Server Resources List and Usage example:
 		Delete a given recipe by its ID.
 
 	- Verb: DELETE
-	- URI: recipes/{recpe_id}?key=USER_API_KEY
+	- URI: recipes/{recipe_id}?key=USER_API_KEY
 	- URL Example: {website_url}/recipes/11?key=b01baa0a46a27cfb8826e8bf6abfc4c2
 	- Expected Return:
 	{
