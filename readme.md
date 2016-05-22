@@ -46,7 +46,7 @@ MEMCACHED_HOST=localhost
 MEMCACHED_PORT=11211
 ```
 
-Here, you configure the memcache connection, we use the default configuration, but **changing the _CACHE_DRIVER_ to _memcache_**. Also, here we confdigure the Database connection. After you create the database you set the databse name here.
+Here, you configure the memcache connection, we use the default configuration, but **changing the _CACHE_DRIVER_ to _memcache_**. Also, here we configure the Database connection. After you create the database you set the databse name here.
 
 #### Creating tables ####
 
