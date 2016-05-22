@@ -1,8 +1,5 @@
-#AUTHORS:
-Tiago Siqueira: 
- - tiago@imorec.com
-Vitor Luis
- - vitor.luis98@gmail.com
+- Contributors: Tiago Siqueira - tiago@imorec.com
+- Contributors: Vitor Luis - vitor.luis98@gmail.com
 
 # Installing Meal API
 
@@ -73,6 +70,7 @@ Now if you access http://your-configured-nameserver/ you should see this page as
 
 ### CoolRecipes API Usage. ###
 - RESTfull Server Resources List and Usage example
+-Postman examples: https://www.getpostman.com/collections/886947dd0ec1fe40db2b
 
 #### Register New User. ####
 - Description: 

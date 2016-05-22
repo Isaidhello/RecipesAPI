@@ -70,6 +70,7 @@ Now if you access http://your-configured-nameserver/ you should see this page as
 
 ### CoolRecipes API Usage. ###
 - RESTfull Server Resources List and Usage example
+-Postman examples: https://www.getpostman.com/collections/886947dd0ec1fe40db2b
 
 #### Register New User. ####
 - Description: 
