@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="71c81c91-d7be-4bb6-979b-f919d983d232" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/RecipesController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/RecipesController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RecipesAPI.iws" />
@@ -26,21 +25,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="routes.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4278438">
-              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+            <state vertical-scroll-proportion="-2.6666667">
+              <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RecipesController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RecipesController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RecipesController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.0">
-              <caret line="147" column="44" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
+            <state vertical-scroll-proportion="-0.9558574">
+              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
               <folding>
                 <element signature="e#40#67#0#PHP" expanded="true" />
               </folding>
@@ -51,7 +50,7 @@
       <file leaf-file-name="NutritionCalculation.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/USDA/NutritionCalculation.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.6984127">
+            <state vertical-scroll-proportion="13.5079365">
               <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
               <folding />
             </state>
@@ -88,8 +87,8 @@
         <option value="$PROJECT_DIR$/config/api.php" />
         <option value="$PROJECT_DIR$/app/USDA/RecipeCalc.php" />
         <option value="$PROJECT_DIR$/app/USDA/NutritionCalculation.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/RecipesController.php" />
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/RecipesController.php" />
       </list>
     </option>
   </component>
@@ -403,7 +402,13 @@
       <option name="project" value="LOCAL" />
       <updated>1463874613859</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixing recipe update method">
+      <created>1463876944834</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1463876944834</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -453,7 +458,8 @@
     <MESSAGE value="Creating Recipes Done" />
     <MESSAGE value="List and Delete Recipes Done" />
     <MESSAGE value="Nutrition calculation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nutrition calculation" />
+    <MESSAGE value="Fixing recipe update method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing recipe update method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -801,9 +807,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.6666667">
+          <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/USDA/NutritionCalculation.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.6984127">
+        <state vertical-scroll-proportion="13.5079365">
           <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
           <folding />
         </state>
@@ -811,19 +825,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RecipesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.0">
-          <caret line="147" column="44" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
+        <state vertical-scroll-proportion="-0.9558574">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding>
             <element signature="e#40#67#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4278438">
-          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>

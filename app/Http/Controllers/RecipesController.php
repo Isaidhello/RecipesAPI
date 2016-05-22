@@ -98,6 +98,9 @@ class RecipesController extends Controller {
         $totalNutrients = $nutrition_facts->calculateNutrients();
         $recipe->aggregates_nutrients = $totalNutrients;
 
+        /** Remove the nutrient_id */
+        $recipe->aggregates_nutrients = array_values($recipe->aggregates_nutrients);
+
         /** Return All user Recipes */
         return $recipe->toJson();
 
