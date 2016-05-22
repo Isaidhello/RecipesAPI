@@ -52,6 +52,7 @@ namespace App\Http\Controllers;
 use App\Models\Ingredients;
 use App\Models\Recipe;
 use App\USDA\NutritionCalculation;
+use App\USDA\USDAData;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -127,10 +128,20 @@ class RecipesController extends Controller {
 
             /** Loop each ingredient and save it to a recipe */
             foreach ($data['ingredients'] as $food_id => $qty) {
+				
+				$url = formatFoodReportURL($food_id);
+
+				/** Hit the USDA Service and get the search
+				 * If the same search was performed before, the data will be get from the cache
+				 * */
+				$usda = new USDAData();
+				$nutrients_food_data = $usda->getFoodData($url, $food_id);
+
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
                 $ingredient->food_id = $food_id;
                 $ingredient->quantity = $qty;
+				$ingredient->description = $nutrients_food_data['name'];
                 $ingredient->save();
             }
 

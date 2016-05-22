@@ -31,6 +31,7 @@ class NutritionCalculation {
              * */
             $usda = new USDAData();
             $nutrients_food_data = $usda->getFoodData($url, $ingredient->food_id);
+			$nutrients_food_data = $nutrients_food_data['nutrients'];
 
             /**
              * Calculate the nutrients of an ingredient, given the quantity in 'g'
@@ -70,7 +71,7 @@ class NutritionCalculation {
      */
     private function sumTotalNutrients() {
         /** Before Loop, reset the sum array */
-        foreach ($this->sumNutrients as &$nutrients) {
+        foreach ($this->sumNutrients as $nutrients) {
             $nutrients['value'] = 0;
         }
 

@@ -112,6 +112,7 @@ class USDAData {
      */
     private function handleReportData($data) {
         $json = json_decode($data['body']);
+		$name = $json->report->food->name;
         $nutrients = $json->report->food->nutrients;
 
         /** Loop each element and format item */
@@ -123,7 +124,7 @@ class USDAData {
                 "value" => $nutrient->value,
             ];
         }
-        return $formatted_list;
+        return ['name' => $name, 'nutrients' => $formatted_list];
     }
 
     /**
