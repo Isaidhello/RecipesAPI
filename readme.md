@@ -9,6 +9,7 @@ apt-get install memcached
 apt-get install php5-memcached
 ```
 > If you are on Ubuntu 16.04, the PHP package is called 'php-memcached'
+> After installation, **restart your webserver**
 
  - Clone the repository from [Github](https://github.com/CoolRecipes/RecipesAPI)
  - After clone, run the following command to Install Laravel packages
