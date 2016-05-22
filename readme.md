@@ -64,13 +64,11 @@ Now if you access http://your-configured-nameserver/ you should see this page as
 
 
 *******************************************************************************
-** CoolRecipes API Usage.
-*******************************************************************************
-
+CoolRecipes API Usage.
 RESTfull Server Resources List and Usage example:
 
 *******************************************************************************
-** Register New User:
+Register New User:
 *******************************************************************************
 	- Description: 
 		Register a new user on CoolRecipe database.
@@ -91,7 +89,7 @@ RESTfull Server Resources List and Usage example:
 		}
 	
 *******************************************************************************
-** User Login / API Generation:
+User Login / API Generation:
 *******************************************************************************
 	- Description: 
 		Authenticate and generate an API key for a registered user on CoolRecipe 
@@ -119,7 +117,7 @@ RESTfull Server Resources List and Usage example:
 	}
 	
 *******************************************************************************
-** Food Search:
+Food Search:
 *******************************************************************************
 	- Description: 
 		Submit a search term (food name) and get a response with USDA food ID
@@ -139,7 +137,7 @@ RESTfull Server Resources List and Usage example:
 	]
 
 *******************************************************************************
-** Food Report:
+Food Report:
 *******************************************************************************
 	- Description: 
 		Submit a food USDA id to USDA API and get its complete nutrients list.
@@ -165,7 +163,7 @@ RESTfull Server Resources List and Usage example:
 	.... JSON response continues....
 
 *******************************************************************************
-** Create New Recipe:
+Create New Recipe:
 *******************************************************************************
 	- Description: 
 		Submit a new recipe to be stored on CoolRecipe.
@@ -197,7 +195,7 @@ RESTfull Server Resources List and Usage example:
 	}
 
 *******************************************************************************
-** List My Recipes:
+List My Recipes:
 *******************************************************************************
 	- Description: 
 		Return a list of all recipes for a given API KEY.
@@ -250,7 +248,7 @@ RESTfull Server Resources List and Usage example:
 	]
 
 *******************************************************************************
-** Get Recipe By ID:
+Get Recipe By ID:
 *******************************************************************************
 	- Description: 
 		Return a Recipe with its nutrition facts.
@@ -468,7 +466,7 @@ RESTfull Server Resources List and Usage example:
 	}
 
 *******************************************************************************
-** Update Recipe:
+Update Recipe:
 *******************************************************************************
 	- Description: 
 		Update a already existing recipe with new data.
@@ -496,7 +494,7 @@ RESTfull Server Resources List and Usage example:
 	}
 
 *******************************************************************************
-** Delete Recipe:
+Delete Recipe:
 *******************************************************************************
 	- Description: 
 		Delete a given recipe by its ID.
