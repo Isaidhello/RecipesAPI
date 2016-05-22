@@ -1,4 +1,18 @@
 <?php
+/**
+ * RESTfull API for USDA Search and food report.
+ *
+ * Available verbs and its current functions:
+ *
+ * Verb GET, route /search
+ * @example /search/{term}?key=USER_API_KEY Get a list of food items from USDA.
+ * @see searchByTerm
+ *
+ * Verb GET, route /search
+ * @example /report/{usda_food_id}?key=USER_API_KEY Get complete information from given food from USDA API.
+ * @see getFoodDetail
+ *
+ */
 
 namespace App\Http\Controllers;
 
@@ -10,12 +24,20 @@ class SearchController extends Controller {
         $this->middleware('token');
     }
 
+    /**
+     * Given a food name, check it against USDA API.
+     *
+     * @param string $term
+     *    Food name.
+     * @return JSON data
+     *    USDA Food list JSON object already parsed to this APP format.
+     */
     public function searchByTerm($term) {
 
         /** Get URL */
         $url = formatSearchURL($term);
 
-        /** Hit the USDA Service and get the search */
+        /** Hit the USDA Service and get the search result */
         $usda = new USDAData();
         $data = $usda->performSearch($url, $term);
 
@@ -23,11 +45,19 @@ class SearchController extends Controller {
         return response()->json([$data]);
     }
 
+    /**
+     * Given a usda_food_id, check it against USDA API.
+     *
+     * @param string $food_id
+     *    USDA Food ID.
+     * @return JSON data
+     *    Formatted food JSON object.
+     */
     public function getFoodDetail($food_id) {
         /** Get URL */
         $url = formatFoodReportURL($food_id);
 
-        /** Hit the USDA Service and get the search */
+        /** Hit the USDA Service and get the report results */
         $usda = new USDAData();
         $data = $usda->getFoodData($url, $food_id);
 

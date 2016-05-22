@@ -3,6 +3,15 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * Format USDA Search Service URL.
+ *
+ * @param string $term
+ *    Search term.
+ *
+ * @return string $url
+ *    Formatted URL.
+ */
 function formatSearchURL($term) {
     /** @var  $token
      * Store the USA API Token
@@ -20,6 +29,15 @@ function formatSearchURL($term) {
     return $base_url . $search_uri;
 }
 
+/**
+ * Format USDA Food Report Service URL.
+ *
+ * @param string $food_id
+ *    Food USDA ID term.
+ *
+ * @return string $url
+ *    Formatted URL.
+ */
 function formatFoodReportURL($food_id) {
     /** @var  $token
      * Store the USA API Token
@@ -37,11 +55,31 @@ function formatFoodReportURL($food_id) {
     return $base_url . $search_uri;
 }
 
+/**
+ * Generate an service error message.
+ *
+ * @param string $message
+ *    Error message.
+ * @param int    $code
+ *    Error code.
+ *
+ * @return response.
+ *  JSON Error response.
+ */
 function serviceErrorMessage($message, $code) {
     /** Return encoded JSON */
     return response()->json(['error' => $message], $code);
 }
 
+/**
+ * Get user model from database.
+ *
+ * @param Request $request
+ *    HTTP Request.
+ *
+ * @return object $user
+ *    A valid databse user object.
+ */
 function getUserModel($request) {
     /** Check if the Token is on Header */
     $token = '';
@@ -57,5 +95,4 @@ function getUserModel($request) {
 
     /** return the first record */
     return $user->first();
-
 }

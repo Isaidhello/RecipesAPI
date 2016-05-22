@@ -12,5 +12,7 @@ return [
     "search_uri" => "search/?format=json&q=%s&api_key=%s&sort=%s",
 
     /** Food Report URI of the USDA API */
-    "food_report_uri" => "reports/?ndbno=%s&type=b&format=json&api_key=%s"
+    "food_report_uri" => "reports/?ndbno=%s&type=b&format=json&api_key=%s",
+
+	"cache_expiration_time" => 168 * 24,
 ];

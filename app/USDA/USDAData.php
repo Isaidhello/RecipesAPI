@@ -2,7 +2,6 @@
 
 namespace App\USDA;
 
-
 use Illuminate\Support\Facades\Cache;
 use GuzzleHttp;
 use GuzzleHttp\Exception\ClientException;
@@ -20,6 +19,16 @@ class USDAData {
         $this->httpClient = new GuzzleHttp\Client();
     }
 
+    /**
+     * Make an API call to USDA Service.
+     *
+     * @param string $url
+     *    API Formatted URL.
+     * @param string $term
+     *    Search Term.
+     * @return JSON data.
+     *    Return, if sucessfull a JSON data with current food list.
+     */
     public function performSearch($url, $term) {
         /** Check if cache exists */
         if (Cache::has($term)) {
@@ -40,6 +49,16 @@ class USDAData {
         return $this->handleSearchData($data);
     }
 
+    /**
+     * Get Food Data from USDA service.
+     *
+     * @param string $url
+     *    Formatted USDA Service URL.
+     * @param string $food_id
+     *    USDA Food ID.
+     * @return JSON data
+     *    Formatted JSON object.
+     */
     public function getFoodData($url, $food_id) {
 
         /** Check if cache exists */
@@ -61,6 +80,14 @@ class USDAData {
         return $this->handleReportData($data);
     }
 
+    /**
+     * Given a Search USDA JSON food list , format it to make it simpler.
+     *
+     * @param JSON $data
+     *    Returned USDA Service JSON
+     * @return JSON $data
+     *    Formatted JSON food List.
+     */
     private function handleSearchData($data) {
         /** Decode Data JSON */
         $json = json_decode($data['body']);
@@ -74,6 +101,14 @@ class USDAData {
         return $formatted_list;
     }
 
+    /**
+     * Given a food USDA JSON, parse it and make it simpler.
+     *
+     * @param JSON $data
+     *    USDA Response JSON
+     * @return JSON $data
+     *    Simpler food report JSON.
+     */
     private function handleReportData($data) {
         $json = json_decode($data['body']);
         $nutrients = $json->report->food->nutrients;
@@ -90,6 +125,14 @@ class USDAData {
         return $formatted_list;
     }
 
+    /**
+     * Connects to USDA Service and make and API Call.
+     *
+     * @param string $url
+     *    Formatted Service URL.
+     * @return response json
+     *    Service JSON response.
+     */
     private function hitService($url) {
         /** @var Object $response
          * Call the USDA API
@@ -124,11 +167,22 @@ class USDAData {
                 "error_message" => $ex->getMessage(),
             ];
         }
-
     }
 
+    /**
+     * Cache Service response.
+     * In order to avoid hitting USDA service every search or report request,
+     * we create a cache based either on search term, or food id from USDA, this
+     * makes our own service response API much faster, and even creates a backup
+     * in case of a USDA service downtime.
+     *
+     * @param object $data
+     *    Service response data.
+     * @param string $term
+     *    Cache key, based on term.
+     */
     private function cacheData($data, $term) {
-        /** Add data in Cache for a month */
-        Cache::add($term, $data, 720 * 60);
+        /** Add data in Cache for 7 days */
+        Cache::add($term, $data, Config::get('api.cache_expiration_time'));
     }
 }

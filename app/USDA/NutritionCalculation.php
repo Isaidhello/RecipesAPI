@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vitor
- * Date: 21/05/16
- * Time: 17:08
- */
 
 namespace App\USDA;
 
@@ -23,6 +17,9 @@ class NutritionCalculation {
         $this->ingredients = $ingredients;
     }
 
+    /**
+     * Calculate nutrients on a given recipe.
+     */
     public function calculateNutrients() {
         /** Loop all ingredients and get the nutrients */
         foreach ($this->ingredients as $ingredient) {
@@ -51,6 +48,14 @@ class NutritionCalculation {
         return $this->sumNutrients;
     }
 
+    /**
+     * Calc individual nutrients based on its quantity in "g".
+     * 
+     * @param array $data
+     *    Nutrient data.
+     * @param int $qty
+     *    Ingredient quantity in "g"
+     */
     private function calcIndividualNutrients(&$data, $qty) {
         /** @var array $nutrient
          * Loop each nutrient and calculate the value by de qty in 'g'
@@ -60,6 +65,9 @@ class NutritionCalculation {
         }
     }
 
+    /**
+     * Sum total nutrients for given recipe.
+     */
     private function sumTotalNutrients() {
         /** Before Loop, reset the sum array */
         foreach ($this->sumNutrients as &$nutrients) {

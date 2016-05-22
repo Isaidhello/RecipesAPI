@@ -10,7 +10,9 @@ class TokenMiddleware {
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
+     *    HTTP Request Data.
      * @param  \Closure $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next) {
@@ -19,7 +21,7 @@ class TokenMiddleware {
 
             /** If the Header is present, but the value is empty */
             if (empty($request->header('APIAuth'))) {
-                /** return the error message */
+                /** return error message */
                 return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
                 /** Otherwise, get the token, and try to load the user via Token */
@@ -27,7 +29,7 @@ class TokenMiddleware {
 
                 /** If the function checkUser returns false, any users were loaded :( */
                 if (!$this->checkUser($token)) {
-                    /** return the error message */
+                    /** return error message */
                     return serviceErrorMessage('Invalid API Token', 403);
                 }
 
@@ -37,7 +39,7 @@ class TokenMiddleware {
 
             /** If the queryString is present, but is empty... */
             if (empty($request->get('key'))) {
-                /** return the error message */
+                /** return error message */
                 return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
                 /** Otherwise, get the token, and try to load the user via Token */
@@ -45,7 +47,7 @@ class TokenMiddleware {
 
                 /** If the function checkUser returns false, any users were loaded :( */
                 if (!$this->checkUser($token)) {
-                    /** return the error message */
+                    /** return error message */
                     return serviceErrorMessage('Invalid API Token', 403);
                 }
             }
@@ -57,6 +59,14 @@ class TokenMiddleware {
         return $next($request);
     }
 
+    /**
+     * Check if current token belongs to a registered user.
+     *
+     * @param string $token
+     *    Given user token.
+     * @return bool
+     *    Either TRUE if user is authenticated or FALSE.
+     */
     private function checkUser($token) {
         /** try to load user via Query Scope */
         $user = User::byToken($token);
