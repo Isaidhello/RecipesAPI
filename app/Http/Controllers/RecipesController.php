@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredients;
 use App\Models\Recipe;
-use App\Models\User;
 use App\USDA\NutritionCalculation;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -16,6 +15,7 @@ use \Validator;
 class RecipesController extends Controller {
 
     public function __construct() {
+        /** Set the middleware for this controller */
         $this->middleware('token');
     }
 
@@ -26,7 +26,8 @@ class RecipesController extends Controller {
      */
     public function index(Request $request) {
 
-        $user = $this->getUserData($request);
+        /** Get user by his token */
+        $user = getUserModel($request);
 
         /** Get all recipes with its ingredients*/
         $recipes = Recipe::with('ingredients')->byUser($user->id);
@@ -42,19 +43,24 @@ class RecipesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        /** validate the data */
+        /** @var string $data
+         * Get the JSON from the Payload
+         * */
         $data = $request->json()->all();
+
+        /** validate the data */
         $validator = Validator::make($data, Recipe::rules());
         if ($validator->fails()) {
             /** Back to user the error */
             return serviceErrorMessage($validator->messages(), 400);
         }
 
+        /** Begin a transaction on database */
         DB::beginTransaction();
 
         try {
-
-            $user = $this->getUserData($request);
+            /** Get user by his token */
+            $user = getUserModel($request);
 
             /** Save the Recipe */
             $recipe = new Recipe();
@@ -72,13 +78,20 @@ class RecipesController extends Controller {
                 $ingredient->save();
             }
 
+            /** If everything went right, commit the transaction */
             DB::commit();
 
+            /** return the success message */
             return response()->json(['message' => 'ok']);
 
         } catch (Exception $e) {
+            /** If something went wrong, log on Laravel */
             Log::error($e->getMessage());
+
+            /** Rollback the Transaction */
             DB::rollback();
+
+            /** Return the error message */
             return serviceErrorMessage($e->getMessage(), 400);
         }
     }
@@ -95,8 +108,9 @@ class RecipesController extends Controller {
 
         /** Loop all ingredients, getting data from the cache */
         $nutrition_facts = new NutritionCalculation($recipe->ingredients);
-        $totalNutrients = $nutrition_facts->calculateNutrients();
-        $recipe->aggregates_nutrients = $totalNutrients;
+
+        /** Calculate all nutrients */
+        $recipe->aggregates_nutrients = $nutrition_facts->calculateNutrients();
 
         /** Remove the nutrient_id */
         $recipe->aggregates_nutrients = array_values($recipe->aggregates_nutrients);
@@ -114,8 +128,11 @@ class RecipesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        /** validate the data */
+        /** @var array $data
+         * Get JSON from Payload
+         * */
         $data = $request->json()->all();
+        /** Validate the data */
         $validator = Validator::make($data, Recipe::rules());
 
         if ($validator->fails()) {
@@ -123,16 +140,19 @@ class RecipesController extends Controller {
             return serviceErrorMessage($validator->messages(), 400);
         }
 
+        /** Begin a transaction in database */
         DB::beginTransaction();
 
         try {
-
             /** Save the Recipe */
             $recipe = Recipe::find($id);
             $recipe->name = $data['name'];
             $recipe->description = $data['description'];
             $recipe->save();
 
+            /** Instead update every ingredient
+             * Remove them all, and add again
+             * */
             foreach ($recipe->ingredients as $ingredient) {
                 $ingredient->delete();
             }
@@ -146,13 +166,20 @@ class RecipesController extends Controller {
                 $ingredient->save();
             }
 
+            /** If everything went right, commit the transaction */
             DB::commit();
 
+            /** return the success message */
             return response()->json(['update' => 'ok']);
 
         } catch (Exception $e) {
+            /** if something went wrong, log on Laravel */
             Log::error($e->getMessage());
+
+            /** Rollback the transaction on Laravel */
             DB::rollback();
+
+            /** return the Error message */
             return serviceErrorMessage($e->getMessage(), 400);
         }
     }
@@ -164,24 +191,15 @@ class RecipesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+        /** @var object $recipe
+         * Find the Model
+         * */
         $recipe = Recipe::find($id);
+
+        /** And remove */
         $recipe->delete();
 
+        /** return the success message */
         return response()->json(['deleted' => 'OK']);
     }
-
-    private function getUserData($request) {
-
-        if ($request->hasHeader('APIAuth')) {
-            $token = $request->header('APIAuth');
-        } else if ($request->has('key')) {
-            $token = $request->get('key');
-        }
-
-        $user = User::byToken($token);
-
-        return $user->first();
-
-    }
-
 }

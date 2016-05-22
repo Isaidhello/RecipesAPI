@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Config;
 
 function formatSearchURL($term) {
@@ -37,5 +38,24 @@ function formatFoodReportURL($food_id) {
 }
 
 function serviceErrorMessage($message, $code) {
+    /** Return encoded JSON */
     return response()->json(['error' => $message], $code);
+}
+
+function getUserModel($request) {
+    /** Check if the Token is on Header */
+    $token = '';
+    if ($request->hasHeader('APIAuth')) {
+        $token = $request->header('APIAuth');
+        /** If not on Header, try to get via query String */
+    } else if ($request->has('key')) {
+        $token = $request->get('key');
+    }
+
+    /** Load the user by his token */
+    $user = User::byToken($token);
+
+    /** return the first record */
+    return $user->first();
+
 }
