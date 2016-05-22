@@ -65,29 +65,30 @@ Now if you access http://your-configured-nameserver/ you should see this page as
 
 
 *******************************************************************************
-CoolRecipes API Usage.
-RESTfull Server Resources List and Usage example:
+ - CoolRecipes API Usage.
+ - RESTfull Server Resources List and Usage example:
 
 *******************************************************************************
 Register New User:
-*******************************************************************************
-	- Description: 
-		Register a new user on CoolRecipe database.
 
-	- Verb: POST
-	- URI: user/register
-	- URL Example: {website_url}/user/register
-	- Body Payload expected format: JSON
-	- Fields:
-		- Name: String, rerquired;
-		- Email: String, rerquired;
-		- Password: String, rerquired;
-	- Payload Example:
-		{
-			"name" : "Example User",
-			"email" : "example@user.com",
-			"password" : "mypassword"
-		}
+- Description: 
+	Register a new user on CoolRecipe database.
+
+- Verb: POST
+- URI: user/register
+- URL Example: {website_url}/user/register
+- Body Payload expected format: JSON
+- Fields:
+	- Name: String, rerquired;
+	- Email: String, rerquired;
+	- Password: String, rerquired;
+- Payload Example:
+	{
+		"name" : "Example User",
+		"email" : "example@user.com",
+		"password" : "mypassword"
+	}
+
 	
 *******************************************************************************
 User Login / API Generation:
@@ -501,7 +502,7 @@ Delete Recipe:
 		Delete a given recipe by its ID.
 
 	- Verb: DELETE
-	- URI: recipes/{recpe_id}?key=USER_API_KEY
+	- URI: recipes/{recipe_id}?key=USER_API_KEY
 	- URL Example: {website_url}/recipes/11?key=b01baa0a46a27cfb8826e8bf6abfc4c2
 	- Expected Return:
 	{
