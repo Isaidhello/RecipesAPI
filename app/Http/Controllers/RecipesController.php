@@ -128,7 +128,6 @@ class RecipesController extends Controller {
 
             /** Loop each ingredient and save it to a recipe */
             foreach ($data['ingredients'] as $food_id => $qty) {
-				
 				$url = formatFoodReportURL($food_id);
 
 				/** Hit the USDA Service and get the search
@@ -136,6 +135,10 @@ class RecipesController extends Controller {
 				 * */
 				$usda = new USDAData();
 				$nutrients_food_data = $usda->getFoodData($url, $food_id);
+
+				if (!isset($nutrients_food_data['name'])) {
+					throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
+				}
 
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
@@ -149,7 +152,7 @@ class RecipesController extends Controller {
             DB::commit();
 
             /** return the success message */
-            return response()->json(['message' => 'ok']);
+            return response()->json(['message' => 'ok', 'recipe_id' => $recipe->id]);
 
         } catch (Exception $e) {
             /** If something went wrong, log on Laravel */
@@ -235,10 +238,23 @@ class RecipesController extends Controller {
 
             /** Loop each ingredient and saves it to a recipe */
             foreach ($data['ingredients'] as $food_id => $qty) {
+				$url = formatFoodReportURL($food_id);
+
+				/** Hit the USDA Service and get the search
+				 * If the same search was performed before, the data will be get from the cache
+				 * */
+				$usda = new USDAData();
+				$nutrients_food_data = $usda->getFoodData($url, $food_id);
+
+				if (!isset($nutrients_food_data['name'])) {
+					throw new Exception('Food ID ' . $food_id . ' not found on USDA system, please double check this ID');
+				}
+				
                 $ingredient = new Ingredients();
                 $ingredient->id_recipe = $recipe->id;
                 $ingredient->food_id = $food_id;
                 $ingredient->quantity = $qty;
+				$ingredient->description = $nutrients_food_data['name'];
                 $ingredient->save();
             }
 
@@ -272,6 +288,10 @@ class RecipesController extends Controller {
          * Find the Model
          * */
         $recipe = Recipe::find($id);
+
+		if (is_null($recipe)) {
+			return serviceErrorMessage('Recipe not found', 400);
+		}
 
         /** And remove */
         $recipe->delete();
