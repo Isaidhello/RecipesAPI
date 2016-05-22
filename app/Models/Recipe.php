@@ -21,6 +21,9 @@ class Recipe extends Model {
         return $query->where('id_user', $id_user)->get();
     }
 
+    /** This function return an array telling the validation rules
+     * of this Model
+     * */
     public static function rules() {
         return [
             "name" => "required",

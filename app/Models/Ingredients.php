@@ -11,6 +11,7 @@ class Ingredients extends Model {
     /** Disable timestamps */
     public $timestamps = false;
 
+    /** Make the relationship wit the Recipe table */
     public function recipe() {
         return $this->belongsTo('App\Models\Recipe', 'id_recipe');
     }

@@ -14,22 +14,38 @@ class TokenMiddleware {
      * @return mixed
      */
     public function handle($request, Closure $next) {
+        /** Check if the Token is on Header */
         if ($request->hasHeader('APIAuth')) {
+
+            /** If the Header is present, but the value is empty */
             if (empty($request->header('APIAuth'))) {
+                /** return the error message */
                 return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
+                /** Otherwise, get the token, and try to load the user via Token */
                 $token = $request->header('APIAuth');
+
+                /** If the function checkUser returns false, any users were loaded :( */
                 if (!$this->checkUser($token)) {
+                    /** return the error message */
                     return serviceErrorMessage('Invalid API Token', 403);
                 }
 
             }
+            /** If token is not on Header, try to get via queryString */
         } else if ($request->has('key')) {
+
+            /** If the queryString is present, but is empty... */
             if (empty($request->get('key'))) {
+                /** return the error message */
                 return serviceErrorMessage('You must pass the Token to use the API', 401);
             } else {
+                /** Otherwise, get the token, and try to load the user via Token */
                 $token = $request->get('key');
+
+                /** If the function checkUser returns false, any users were loaded :( */
                 if (!$this->checkUser($token)) {
+                    /** return the error message */
                     return serviceErrorMessage('Invalid API Token', 403);
                 }
             }
@@ -37,11 +53,15 @@ class TokenMiddleware {
             return serviceErrorMessage('You must pass the Token to use the API', 401);
         }
 
+        /** If get here, everything is fine, the Token is right and user exists, Go ahead bro! :D */
         return $next($request);
     }
 
     private function checkUser($token) {
+        /** try to load user via Query Scope */
         $user = User::byToken($token);
+
+        /** If count > 0, there exists an User with a valid token */
         return $user->count() == 0 ? false : true;
     }
 }

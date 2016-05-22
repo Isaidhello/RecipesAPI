@@ -20,6 +20,9 @@ class User extends Authenticatable {
         'password',
     ];
 
+    /** This function return an array telling the validation rules
+     * of this Model
+     * */
     public static function rules() {
         return [
             "name" => "required|max:100",
