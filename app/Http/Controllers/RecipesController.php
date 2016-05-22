@@ -61,9 +61,9 @@ use \Validator;
 
 class RecipesController extends Controller {
 
-  /**
-   * Class constructor.
-   */
+    /**
+     * Class constructor.
+     */
     public function __construct() {
         /** Set the middleware for this controller */
         $this->middleware('token');
@@ -164,18 +164,23 @@ class RecipesController extends Controller {
     public function show(Request $request, $id) {
         /** Get all recipes with its ingredients*/
         $recipe = Recipe::with('ingredients')->find($id);
-
         /** Loop all ingredients, getting data from the cache */
-        $nutrition_facts = new NutritionCalculation($recipe->ingredients);
+        if (!is_null($recipe)) {
+            $nutrition_facts = new NutritionCalculation($recipe->ingredients);
 
-        /** Calculate all nutrients */
-        $recipe->aggregates_nutrients = $nutrition_facts->calculateNutrients();
+            /** Calculate all nutrients */
+            $recipe->aggregates_nutrients = $nutrition_facts->calculateNutrients();
 
-        /** Remove the nutrient_id */
-        $recipe->aggregates_nutrients = array_values($recipe->aggregates_nutrients);
+            /** Remove the nutrient_id */
+            $recipe->aggregates_nutrients = array_values($recipe->aggregates_nutrients);
 
-        /** Return All user Recipes */
-        return $recipe->toJson();
+
+            /** Return All user Recipes */
+            return $recipe->toJson();
+        } else {
+            /** Return error, telling user Recipes don't exists */
+            return serviceErrorMessage('Recipe not found', 404);
+        }
     }
 
     /**
